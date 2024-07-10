@@ -45,14 +45,16 @@ int main(void)
   //~ Loading Textures
   Texture2D ship = LoadTexture("assets/ship_outline.png");
   Texture2D background = LoadTexture("assets/background.png");
-  Texture2D bullet_texture = LoadTexture("assets/ship.png");
+  Texture2D bullet_texture = LoadTexture("assets/bullet2.png");
   BULLET bullet = {SCREEN_WIDTH / 2, SCREEN_HEIGHT - 60, bullet_texture};
   Texture2D textures[] = {ship, background, bullet_texture};
   int textures_length = sizeof(textures) / sizeof(textures[0]);
-
+  
+  //? Bullet array to hold all the instances of the bullets 
+  //TODO bullets array should be a list that can add bullets
   BULLET bullets[MAX_BULLETS];
   int bullets_shot = 0;
-  int bullet_speed = 1.01;
+  int bullet_speed = 1.005;
 
   //~ Main Loop
   while (!WindowShouldClose())
@@ -64,22 +66,21 @@ int main(void)
     DrawTexture(background, 0, 0, WHITE);
     draw_ship(ship);
     DrawFPS(10, 10);
-    DrawText("Press the left mouse button to shoot", 10, 30, 20, BLACK);
+    DrawText("Press the left mouse button to shoot", 10, 30, 20, WHITE);
 
     char bullet_count_text[10];
     if (MAX_BULLETS - bullets_shot == 0)
     {
-      DrawText("No Bullets Left", 10, 50, 20, BLACK);
+      DrawText("No Bullets Left", 10, 50, 20, GREEN);
     }
     else
     {
-
       sprintf(bullet_count_text, "%d", MAX_BULLETS - bullets_shot);
-      DrawText(bullet_count_text, 10, 50, 20, BLACK);
+      DrawText(bullet_count_text, 10, 50, 20, GREEN);
     }
 
     // Draw and update bullets
-    if (IsMouseButtonPressed(0) && bullets_shot < MAX_BULLETS)
+    if (IsMouseButtonDown(0) && bullets_shot < MAX_BULLETS)
     {
       bullets[bullets_shot] = (BULLET){GetMouseX(), SCREEN_HEIGHT - 60, bullet_texture};
       bullets_shot++;
